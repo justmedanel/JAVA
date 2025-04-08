@@ -1,37 +1,37 @@
 package sout;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
 
-public class MainApp {
+class MainApp {
     public static void main(String[] args) {
-        // Citirea unui număr natural de la tastatură
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Introduceți un număr natural: ");
-        int n = scanner.nextInt();
-
-        // Verificarea dacă numărul este prim și găsirea divizorilor
-        if (n <= 1) {
-            System.out.println("Numărul trebuie să fie mai mare decât 1.");
-        } else {
-            boolean isPrime = true;  // Presupunem că numărul este prim
-            System.out.print("Divizorii lui " + n + " sunt: ");
-
-            for (int i = 1; i <= n; i++) {
-                if (n % i == 0) {
-                    System.out.print(i + " ");
-                    if (i != 1 && i != n) {
-                        isPrime = false;  // Dacă găsim un divizor diferit de 1 și n, numărul nu este prim
-                    }
-                }
-            }
-
-            // Dacă numărul este prim, afișăm un mesaj corespunzător
-            if (isPrime) {
-                System.out.println("\nNumărul este prim.");
-            } else {
-                System.out.println("\nNu e nr prim");  // Linia goală pentru separare
-            }
+        String[] judete = new String[0];
+    try(Scanner scanner = new Scanner(new File("judete_in.txt"))) {
+        judete = new String[100];
+        int i = 0;
+        while(scanner.hasNextLine()) {
+            judete[i++] = scanner.nextLine();
         }
+        judete = Arrays.copyOf(judete, i);
 
-        scanner.close();  // Închidem scanner-ul
+    }catch (FileNotFoundException e) {
+        e.printStackTrace();
+    }
+    Arrays.sort(judete);
+        System.out.println(Arrays.toString(judete));
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Introdu judetul de cautat: ");
+        String judetcautat = scanner.nextLine();
+
+        int pozitie = Arrays.binarySearch(judete, judetcautat);
+        if(pozitie >= 0) {
+            System.out.println("Judetul " + judetcautat+ " se afla pe poz " +pozitie);
+        }else{
+            System.out.println("Judetul " +judetcautat+ " nu a fost gasit");
+        }
+        scanner.close();
     }
 }
